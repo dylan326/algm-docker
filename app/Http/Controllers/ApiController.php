@@ -7,7 +7,7 @@ use App\User;
 use App\Componet;
 use App\Issue;
 use App\Timelog;
-
+use App\IssueComponet;
 
 class ApiController extends Controller
 {
@@ -82,20 +82,22 @@ class ApiController extends Controller
          $i = 0;
           while($i < $arraySizeIssue)
           {
+            $issue = new Issue();
+            $issue->code = $Issuelogs[$i]['code'];
+            $issue->save();
+
             $innerC = 0;
             $componetSize = sizeof($Issuelogs[$i]['components']);
-          // echo $Issuelogs[$i]['id']." - ".$Issuelogs[$i]['code'];
-
-           //echo "Componets: ".$Issuelogs[$i]['componets'][$i];
+          
 
            while($innerC < $componetSize)
            {
-           // echo "<hr>Componets: ".$Issuelogs[$i]['components'][$innerC]."<hr>";
+           
 
-              $issue = new Issue();
-              $issue->code = $Issuelogs[$i]['code'];
-              $issue->componet_id = $Issuelogs[$i]['components'][$innerC];
-              $issue->save();
+              $issueComponent = new IssueComponet();
+              $issueComponent->issue_id = $Issuelogs[$i]['id'];
+              $issueComponent->componet_id = $Issuelogs[$i]['components'][$innerC];
+              $issueComponent->save();
 
              $innerC++;
            }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateIssuesTable extends Migration
+class CreateIssueComponetsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,13 @@ class CreateIssuesTable extends Migration
      */
     public function up()
     {
-        Schema::create('issues', function (Blueprint $table) {
+        Schema::create('issue_componets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('code');
+            
+            $table->biginteger('issue_id')->unsigned();
+            $table->biginteger('componet_id')->unsigned();
+            $table->foreign('issue_id')->references('id')->on('issues');
+            $table->foreign('componet_id')->references('id')->on('componets');
             
             $table->timestamps();
         });
@@ -28,6 +32,6 @@ class CreateIssuesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('issues');
+        Schema::dropIfExists('issue_componets');
     }
 }

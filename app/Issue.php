@@ -6,16 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Issue extends Model
 {
-    protected $fillable = ['code', 'componet_id'];
+    protected $fillable = ['code'];
 
     public function timelogs()
     {
         return $this->hasMany('App\Timelog');
     }
 
-    public function componet()
-    {
-        return $this->belongsTo('App\Componet');
-    }
+    
 }
 
