@@ -1,19 +1,49 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Console\Commands;
 
-use Illuminate\Http\Request;
+use Illuminate\Console\Command;
 use App\User;
 use App\Componet;
 use App\Issue;
 use App\Timelog;
 use App\IssueComponet;
 
-class ApiController extends Controller
+class apiDataPull extends Command
 {
-    public function getUser()
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'add:apidata';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'A pull of api endpoint data and ddb population';
+
+    /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
     {
-        
+        parent::__construct();
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        //return \Redirect::route('users');
+
         $client = new \GuzzleHttp\Client;
         //get user api data
         $uri = 'https://my-json-server.typicode.com/bomoko/algm_assessment/users';
@@ -35,17 +65,6 @@ class ApiController extends Controller
         $headerIssue = ['headers' => ['X-Auth-Token' => 'My-Token']];
         $resIssue = $client->get($uriIssue, $headerIssue);
         $Issuelogs = json_decode($resIssue->getBody()->getContents(), true);
-        
-        
-        return $this->inputUsers($users, $componets, $timelogs, $Issuelogs);
-        
-    }
-
-    public function inputUsers($users, $componets, $timelogs, $Issuelogs)
-    {
-      
-      
-      
 
         $arraySize = sizeof($users);
     
@@ -53,11 +72,16 @@ class ApiController extends Controller
          while($u < $arraySize)
          {
            //echo $users[$u]['id']." - ".$users[$u]['name']." - ".$users[$u]['email']."<br>";
-           
-          $user = new User();
-          $user->name = $users[$u]['name'];
-          $user->email = $users[$u]['email'];
-          $user->save();
+          $ifUser = User::where('name', $users[$u]['name'])->where('email', $users[$u]['email'])->first();
+          if(!$ifUser)
+          {
+            $user = new User();
+            $user->name = $users[$u]['name'];
+            $user->email = $users[$u]['email'];
+            $user->save();
+
+          }
+         
 
            $u++;
          }
@@ -68,10 +92,14 @@ class ApiController extends Controller
          while($c < $arraySizeCom)
          {
            //echo $componets[$c]['id']." - ".$componets[$c]['name']."<br>";
-           
-           $componet = new Componet();
-          $componet->name = $componets[$c]['name'];
-          $componet->save();
+           $ifComponet = Componet::where('name', $componets[$c]['name'])->first();
+           if(!$ifComponet)
+           {
+              $componet = new Componet();
+              $componet->name = $componets[$c]['name'];
+              $componet->save();
+           }
+          
 
            $c++;
          }
@@ -82,9 +110,14 @@ class ApiController extends Controller
          $i = 0;
           while($i < $arraySizeIssue)
           {
-            $issue = new Issue();
-            $issue->code = $Issuelogs[$i]['code'];
-            $issue->save();
+            $ifIssue = Issue::where('code', $Issuelogs[$i]['code'])->first();
+            if(!$ifIssue)
+            {
+              $issue = new Issue();
+              $issue->code = $Issuelogs[$i]['code'];
+              $issue->save();
+            }
+            
 
             $innerC = 0;
             $componetSize = sizeof($Issuelogs[$i]['components']);
@@ -93,11 +126,15 @@ class ApiController extends Controller
            while($innerC < $componetSize)
            {
            
-
+            $ifIssueComponet = IssueComponet::where('issue_id', $Issuelogs[$i]['id'])->where('componet_id', $Issuelogs[$i]['components'][$innerC])->first();
+            if(!$ifIssueComponet)
+            {
               $issueComponent = new IssueComponet();
               $issueComponent->issue_id = $Issuelogs[$i]['id'];
               $issueComponent->componet_id = $Issuelogs[$i]['components'][$innerC];
               $issueComponent->save();
+            }
+              
 
              $innerC++;
            }
@@ -113,16 +150,28 @@ class ApiController extends Controller
          while($t < $arraySizeTime)
          {
           // echo $timelogs[$t]['id']." - ".$timelogs[$t]['issue_id']." - ".$timelogs[$t]['user_id']." - ".$timelogs[$t]['seconds_logged']."<br>";
-
+          $ifTimelog = Timelog::where('issue_id', $timelogs[$t]['issue_id'])->where('user_id', $timelogs[$t]['user_id'])->where('seconds_logged', $timelogs[$t]['seconds_logged'])->first();
+         if(!$ifTimelog)
+         {
           $timelog = new Timelog();
-          
           $timelog->issue_id = $timelogs[$t]['issue_id'];
           $timelog->user_id = $timelogs[$t]['user_id'];
           $timelog->seconds_logged = $timelogs[$t]['seconds_logged'];
           $timelog->save();
 
+         }
+          
+
            $t++;
          }
-     
+
+         if($ifUser)
+         {
+             echo "This data already exists in database";
+         }
+         else{
+            echo "Api data pulled and inserted!";
+         }
+         
     }
 }
