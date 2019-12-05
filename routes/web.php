@@ -15,4 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/users', 'ApiController@getUser')->name('users');
+Route::get('/user-timelogs', 'TimelogsController@getUserTimelogs')->name('user-timelogs');
