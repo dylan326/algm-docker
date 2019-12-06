@@ -16,3 +16,6 @@ Route::get('/', function () {
 });
 
 Route::get('/user-timelogs', 'TimelogsController@getUserTimelogs')->name('user-timelogs');
+
+Route::get('/component-metadata', 'ComponetsController@getTotalSecondsLogged')->name('component-metadata');
+
