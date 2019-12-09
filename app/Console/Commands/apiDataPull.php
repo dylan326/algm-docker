@@ -4,10 +4,10 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\User;
-use App\Componet;
+use App\Component;
 use App\Issue;
 use App\Timelog;
-use App\IssueComponet;
+use App\IssueComponent;
 
 class apiDataPull extends Command
 {
@@ -50,11 +50,11 @@ class apiDataPull extends Command
         $header = ['headers' => ['X-Auth-Token' => 'My-Token']];
         $res = $client->get($uri, $header);
         $users = json_decode($res->getBody()->getContents(), true);
-        //get componet apidata
+        //get component apidata
         $uriCom = 'https://my-json-server.typicode.com/bomoko/algm_assessment/components';
         $headerCom = ['headers' => ['X-Auth-Token' => 'My-Token']];
         $resCom = $client->get($uriCom, $headerCom);
-        $componets = json_decode($resCom->getBody()->getContents(), true);
+        $components = json_decode($resCom->getBody()->getContents(), true);
         //get timelog api data
         $uriTime = 'https://my-json-server.typicode.com/bomoko/algm_assessment/timelogs';
         $headerTime = ['headers' => ['X-Auth-Token' => 'My-Token']];
@@ -86,18 +86,18 @@ class apiDataPull extends Command
            $u++;
          }
 
-        $arraySizeCom = sizeof($componets);
+        $arraySizeCom = sizeof($components);
     
         $c = 0;
          while($c < $arraySizeCom)
          {
-           //echo $componets[$c]['id']." - ".$componets[$c]['name']."<br>";
-           $ifComponet = Componet::where('name', $componets[$c]['name'])->first();
-           if(!$ifComponet)
+           //echo $components[$c]['id']." - ".$components[$c]['name']."<br>";
+           $ifcomponent = component::where('name', $components[$c]['name'])->first();
+           if(!$ifcomponent)
            {
-              $componet = new Componet();
-              $componet->name = $componets[$c]['name'];
-              $componet->save();
+              $component = new Component();
+              $component->name = $components[$c]['name'];
+              $component->save();
            }
           
 
@@ -120,18 +120,18 @@ class apiDataPull extends Command
             
 
             $innerC = 0;
-            $componetSize = sizeof($Issuelogs[$i]['components']);
+            $componentSize = sizeof($Issuelogs[$i]['components']);
           
 
-           while($innerC < $componetSize)
+           while($innerC < $componentSize)
            {
            
-            $ifIssueComponet = IssueComponet::where('issue_id', $Issuelogs[$i]['id'])->where('componet_id', $Issuelogs[$i]['components'][$innerC])->first();
-            if(!$ifIssueComponet)
+            $ifIssueComponent = IssueComponent::where('issue_id', $Issuelogs[$i]['id'])->where('component_id', $Issuelogs[$i]['components'][$innerC])->first();
+            if(!$ifIssueComponent)
             {
-              $issueComponent = new IssueComponet();
+              $issueComponent = new IssueComponent();
               $issueComponent->issue_id = $Issuelogs[$i]['id'];
-              $issueComponent->componet_id = $Issuelogs[$i]['components'][$innerC];
+              $issueComponent->component_id = $Issuelogs[$i]['components'][$innerC];
               $issueComponent->save();
             }
               

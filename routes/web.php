@@ -17,5 +17,5 @@ Route::get('/', function () {
 
 Route::get('/user-timelogs', 'TimelogsController@getUserTimelogs')->name('user-timelogs');
 
-Route::get('/component-metadata', 'ComponetsController@outputComponentMetaData')->name('component-metadata');
+Route::get('/component-metadata', 'ComponentsController@outputComponentMetaData')->name('component-metadata');
 

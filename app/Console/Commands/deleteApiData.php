@@ -5,10 +5,10 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\User;
-use App\Componet;
+use App\Component;
 use App\Issue;
 use App\Timelog;
-use App\IssueComponet;
+use App\IssueComponent;
 use Illuminate\Support\Facades\DB;
 
 class deleteApiData extends Command
@@ -45,10 +45,10 @@ class deleteApiData extends Command
     public function handle()
     {
         $deleteTimelogs = Timelog::query()->truncate();
-        $deleteIssueComponets = IssueComponet::query()->truncate();
+        $deleteIssueComponents = IssueComponent::query()->truncate();
         
-        $deleteComponets = Componet::query()->delete();
-        DB::statement("ALTER TABLE componets AUTO_INCREMENT = 1");
+        $deleteComponents = Component::query()->delete();
+        DB::statement("ALTER TABLE components AUTO_INCREMENT = 1");
         
         $deleteIssues = Issue::query()->delete();
         DB::statement("ALTER TABLE issues AUTO_INCREMENT = 1");
@@ -56,7 +56,7 @@ class deleteApiData extends Command
         $deleteUsers = User::query()->delete();
         DB::statement("ALTER TABLE users AUTO_INCREMENT = 1");
 
-        if($deleteTimelogs && $deleteIssueComponets && $deleteComponets && $deleteIssues && $deleteUsers)
+        if($deleteTimelogs && $deleteIssueComponents && $deleteComponents && $deleteIssues && $deleteUsers)
         {
             echo "Api data deleted and auto increment reset";
 

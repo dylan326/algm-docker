@@ -12,11 +12,11 @@
 <h5>No API Data, please run the command: <span style="color: green;"> php artisan add:apidata</span></h5>
 @else
 @foreach (json_decode($totalSeconds) as $seconds) 
-  @if($seconds->componet_id == 1)
+  @if($seconds->component_id == 1)
   <h3>Component: DevOps</h3>
-  @elseif($seconds->componet_id == 2)
+  @elseif($seconds->component_id == 2)
   <h3>Component: Design</h3>
-  @elseif($seconds->componet_id == 3)
+  @elseif($seconds->component_id == 3)
   <h3>Component: Back-end</h3>
   @else
   <h3>Component: Front-end</h3>
