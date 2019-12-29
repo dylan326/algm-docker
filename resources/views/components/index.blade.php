@@ -9,7 +9,8 @@
     color: white;
     font-weight: bold; text-decoration: none;">Back Home</a>
 @if($totalSeconds->isEmpty())
-<h5>No API Data, please run the command: <span style="color: green;"> php artisan add:apidata</span></h5>
+{{-- <h5>No API Data, please run the command: <span style="color: green;"> php artisan add:apidata</span></h5> --}}
+<h5>No API Data, please click here pull the data <span style="color: green;"> <a href="{{ route('pull-and-save-api-data') }}">Pull Data</a></span></h5>
 @else
 @foreach (json_decode($totalSeconds) as $seconds) 
   @if($seconds->component_id == 1)
