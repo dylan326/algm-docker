@@ -117,7 +117,7 @@ class SaveApiData extends PullApiData
           
     }
 
-    public function saveAll($whatLocation)
+    public function saveAll($whatLocation = null)
     {
 
       $userSaved = $this->saveUsersData();

@@ -26,4 +26,4 @@ Route::get('/components-data', [App\Classes\PullApiData::class, 'pullComponentAp
 Route::get('/timelogs-data', [App\Classes\PullApiData::class, 'pullTimelogApi']);
 Route::get('/issues-data', [App\Classes\PullApiData::class, 'pullIssuesApi']);
 Route::get('/save-user-data', [App\Classes\SaveApiData::class, 'saveUsersData']);*/
-Route::get('/pull-and-save-api-data', [App\Classes\SaveApiData::class, 'saveAll'])->name('pull-and-save-api-data');
+Route::get('/pull-and-save-api-data', [App\Classes\SaveApiData::class, 'saveAll'])->name('pull-and-save-api-data')->defaults('whatLocation', 'notArtisan');
