@@ -92,10 +92,6 @@ class SaveApiData extends PullApiData
             }
              $i++;
            }
-
-          
-
-          
           
     }
 
@@ -130,9 +126,13 @@ class SaveApiData extends PullApiData
         $this->allSaved = 1;
       }
 
-      if($whatLocation != "artisanCommand")
+      if($whatLocation != "artisanCommand" && $this->allSaved == 1)
       {
         return redirect()->back();
+      }
+      elseif($whatLocation != "artisanCommand" && $this->allSaved != 1)
+      {
+         echo "Error, looks like there's bad JSON data <a href='/'>Go to home page</a>";
       }
       else
       {

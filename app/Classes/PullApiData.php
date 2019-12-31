@@ -8,6 +8,7 @@ class PullApiData
     
     protected $header = ['headers' => ['X-Auth-Token' => 'My-Token']];
     protected $apiDomain = 'https://my-json-server.typicode.com/bomoko/algm_assessment/';
+    
    
 
 
@@ -16,9 +17,13 @@ class PullApiData
         $client = new \GuzzleHttp\Client;
         $apiEndPoint = $this->apiDomain.$uri;
         $resolution = $client->get($apiEndPoint, $this->header);
+        $decodedJson = json_decode($resolution->getBody()->getContents(), true);
 
-        return json_decode($resolution->getBody()->getContents(), true);
+        if ($decodedJson  === null && json_last_error() !== JSON_ERROR_NONE) {
+                $decodedJson = "incorrect data";
+        }
 
+        return $decodedJson;
     }
 
 

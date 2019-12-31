@@ -53,7 +53,7 @@ class apiDataPull extends Command
         }
         else
         {
-          echo "error contact administrator";
+          echo "error, bad JSON data contact administrator";
         }
          
     }
